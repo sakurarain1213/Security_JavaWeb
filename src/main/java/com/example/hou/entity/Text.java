@@ -8,6 +8,7 @@ import java.util.Date;
 
 @Data//临时类也需要注解
 /**
+ *
  临时类  用于 文本内容统计返回
  */
 public class Text {
