@@ -18,26 +18,6 @@ import java.util.Date;
 
 /*
 
-上传格式
-
-{
- {
-    "username":"6",
-    "startTime":"2023-04-10 23:59:50",
-    "endTime":"2023-04-10 23:59:59",
-    "txtFile":"傻逼sdhabi"
-}
-    注意 一定要按照时分秒的格式 不能少
-
-}
-
-查询
-{
-    "username":"6",
-    "startTime":"2023-04-06 23:59:59",
-    "endTime":"2023-04-09 23:59:59"
-}
-
  */
 
 @Data

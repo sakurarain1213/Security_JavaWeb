@@ -1,7 +1,9 @@
 package com.example.hou.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.hou.entity.CountNumber;
 import com.example.hou.entity.Record;
+import com.example.hou.entity.Text;
 import com.example.hou.entity.UserInfo;
 
 import java.util.List;
@@ -34,4 +36,7 @@ public interface RecordService /*extends IService<Record> */{
 
     public List<Record> recordGetService(Record record);
 
+    public CountNumber numberGetService(Record record);
+
+    public List<Text> textGetService(Record record);
 }

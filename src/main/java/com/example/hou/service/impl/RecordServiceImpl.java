@@ -2,18 +2,15 @@ package com.example.hou.service.impl;
 
 import com.anyic.Wenbenchuli;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.example.hou.entity.CountNumber;
 import com.example.hou.entity.Record;
-import com.example.hou.entity.UserInfo;
+import com.example.hou.entity.Text;
 import com.example.hou.mapper.RecordMapper;
-import com.example.hou.mapper.UserInfoMapper;
 import com.example.hou.service.RecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.anyic.Wenbenchuli.Sentence;
-import com.anyic.Wenbenchuli;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -73,8 +70,6 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             //进行遍历
 
-
-
             for (Sentence each : s) {
 
                 //临时词listt   用下标返回侮辱词
@@ -90,7 +85,10 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
                     r.setWuru(null);
                 }
                 try {
-                    r.setStartTime(simpleDateFormat.parse(each.Get_Sentence_time()));//时间格式转化 强制要求异常提醒
+
+                    Date d=simpleDateFormat.parse(each.Get_Sentence_time());
+                    d.setTime(d.getTime()+ (1000 * 60 * 60 * 8)); //调整一下东八区时间 加八小时
+                    r.setStartTime(d);//时间格式转化 强制要求异常提醒
                 } catch (ParseException e) {
                     throw new RuntimeException(e);
                 }
@@ -117,9 +115,6 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
        * ***/
             return "SUCCESS";
         }
-
-
-
 
 
      // record.setTxtFile("测试嗷嗷");
@@ -172,5 +167,75 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
         }
 //再写一个查询全部  以及平均分！！！
 
+
+    @Override
+    public CountNumber numberGetService(Record record) {
+        CountNumber c=new CountNumber();
+        c.initialize();
+
+        Date time1=record.getStartTime();
+        Date time2=record.getEndTime();
+        String user=record.getUsername();
+
+        if(time1==null ||time2 ==null ||user ==null)
+        {
+            return null;
+        }
+
+        QueryWrapper<Record> qw1 = new QueryWrapper<>();
+        qw1
+                .eq("username",user)
+                .eq("iswuru",1)  //性能显然可以提高  后续自行写SQL
+                .between("start_time",time1,time2);
+        QueryWrapper<Record> qw2 = new QueryWrapper<>();
+        qw2
+                .eq("username",user)
+                .eq("isguli",1)
+                .between("start_time",time1,time2);
+        QueryWrapper<Record> qw3 = new QueryWrapper<>();
+        qw3
+                .eq("username",user)
+                .eq("istiwen",1)
+                .between("start_time",time1,time2);
+       //  q1= qw.eq("iswuru",1);尝试分阶段查询 提高性能   但是似乎不行
+
+        c.set(recordMapper.selectCount(qw1),
+              recordMapper.selectCount(qw2),
+              recordMapper.selectCount(qw3));
+        //recordMapper.selectCount(q1)用于返回查询数量
+
+        return c;
+    }
+
+
+    @Override
+    public List<Text> textGetService(Record record){
+        Date time1=record.getStartTime();
+        Date time2=record.getEndTime();
+        String user=record.getUsername();
+        if(time1==null ||time2 ==null ||user ==null)
+        {
+            return null;
+        }
+        QueryWrapper<Record> qw = new QueryWrapper<>();
+        qw
+                .eq("username",user)
+                .eq("iswuru",1)  //加一个筛选侮辱词的接口
+                .between("start_time",time1,time2)
+                .orderByAsc("start_time")//asc desc 升降序
+        ;
+        //然后得到记录行
+        List<Record> l = recordMapper.selectList(qw);
+        List<Text> lText = new ArrayList<>();
+        for(Record each : l ){
+                Text temp = new Text();
+                temp.setStartTime(each.getStartTime());
+                temp.setWord(each.getWuru());
+                temp.setTxtFile(each.getTxtFile());
+                lText.add(temp);
+        }
+
+        return lText;
+    }
 
 }
