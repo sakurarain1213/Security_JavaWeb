@@ -15,6 +15,44 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+
+
+/*
+
+
+localhost:8080/userInfo/login
+{
+    "username":"1",
+    "password":"123"
+}
+
+localhost:8080/userInfo/register
+{
+    "username":"1",
+    "password":"123"
+}
+
+localhost:8080/userInfo/update
+{
+    "username":"1",
+    "password":"123",
+     "gender":"women",
+     "phone":"13301234566",
+      "email":"1889900@163.com"
+}
+
+
+*/
+
+
+
+
+
+
+
+
+
+
 @SuppressWarnings({"all"}) //控制台输出过滤掉警告信息
 @RestController//控制层标志，等价于@Controller+@ResponseBody
 @Slf4j//lombok用于日志输出
