@@ -86,7 +86,7 @@ public class RecordController {
     RecordService recordService;//不要忘记注入
 
     @RequestMapping("/add")
-    public Result recordAdd(@RequestBody Record record) {
+    public Result recordAdd(@RequestBody Record record) throws Exception {
         String msg = recordService.recordAddService(record);
         if (("SUCCESS").equals(msg)) {
             return ResultUtil.success("语音文本上传成功");

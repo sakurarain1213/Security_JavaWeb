@@ -11,6 +11,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 import java.sql.Blob;
@@ -61,7 +62,7 @@ public class Record {
      * 语音内容
      */
     @TableField("mp3_file")
-    private Blob mp3File;
+    private MultipartFile mp3File;    //文件类型不要blob   直接MultipartFile！！！！！！！！！！
 
     /**
      * 开始时间

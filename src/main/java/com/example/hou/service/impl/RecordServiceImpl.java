@@ -7,18 +7,25 @@ import com.example.hou.entity.Record;
 import com.example.hou.entity.Text;
 import com.example.hou.mapper.RecordMapper;
 import com.example.hou.service.RecordService;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.anyic.Wenbenchuli.Sentence;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
+import com.anyic.WebIATWS;
 /**
  * <p>
  *  服务实现类
@@ -35,7 +42,7 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
 
 
     @Override
-    public String recordAddService(Record record){
+    public String recordAddService(Record record) throws Exception {
 
         //username   txt   start +end  time
         //add的时候不用判断已存在的教师记录 但是要判断非空
@@ -51,32 +58,73 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
         else if(record.getUsername()==null){
             return "缺少用户信息";
         }
-        else{
+        else {
             /****
-             开始分割文本   注意放回到txtFile
+             开始分割文本   注意放回到txtFile    需要时间
              */
 
-            MultipartFile file;
+
+            Date date = new Date();
+            //注意这个时间是格林尼治标准时间 东八区+8小时
+            long time = date.getTime() + 8 * 3600000;
+            date.setTime(time);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("HH mm ss "); //"yyyy-MM-dd HH:mm:ss"
+            String format = dateFormat.format(date);
+
+            //得到时分秒  format
 
 
+            MultipartFile myFile = record.getMp3File();
+            String newFileName = null;
+            try {
+                //1.获取源文件的输入流
+                InputStream is = myFile.getInputStream();
+                //2.获取源文件类型，文件后缀名
+                String originalFileName = myFile.getOriginalFilename();
+                //3.定义上传后的目标文件名(为了避免文件名称重复，此时使用UUID)
+                newFileName = UUID.randomUUID().toString() + "." + originalFileName;
+                //4.通过上传路径得到上传的文件夹
+                File file = new File("resource\\iat");
+                //4.1.若目标文件夹不存在，则创建
+                if (!file.exists()) { //判断目标文件夹是否存在
+                    file.mkdirs();//4.2.不存在，则创建文件夹
+                }
+                //5.根据目标文件夹和目标文件名新建目标文件（上传后的文件）
+                File newFile = new File("resource\\iat", newFileName);  //空的目标文件
+                //6.根据目标文件的新建其输出流对象
+                FileOutputStream os = new FileOutputStream(newFile);
+                //7.完成输入流到输出流的复制
+                IOUtils.copy(is, os);
+                //8.关闭流(先开后关)
+                os.close();
+                is.close();
+                //return "SUCCESS";    上传完毕
+            } catch (IOException e) {
+                e.printStackTrace();
+                //return "ERROR";   有异常
+            }
 
 
+            String Pcmfile = "resource\\iat\\" + newFileName;//保存到路径   .pcm 格式名已经有了
+            WebIATWS pcm = new WebIATWS(Pcmfile);
 
-
-
+            String ans = pcm.getWenben(pcm);
+            //ans前面加  三段时间  后面加st
             //以上进行文件文本化
+            String test =format +ans+"st";
+
+            //String test = record.getTxtFile();
 
 
-            String test=record.getTxtFile();
             //时间差要以分钟为单位的float   gettime方法返回ms
-           // float deltaTime=(record.getEndTime().getTime()-record.getStartTime().getTime());
+            // float deltaTime=(record.getEndTime().getTime()-record.getStartTime().getTime());
             //deltaTime=deltaTime/1000/60;//ms转minute
 
-            Wenbenchuli W=new Wenbenchuli();
+            Wenbenchuli W = new Wenbenchuli();
             W.GetString_analyse2(test);//改一下对应的文本分析
-            ArrayList<Sentence> s=W.Get_AllSentences();
+            ArrayList<Sentence> s = W.Get_AllSentences();
 
-            Record r=new Record();//临时插入变量
+            Record r = new Record();//临时插入变量
 
             //时间格式转化
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -85,30 +133,32 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
             for (Sentence each : s) {
 
                 //临时词listt   用下标返回侮辱词
-                String word=each.words.get(each.wuru_pos);
-                r.setIswuru((each.iswuru)?1:0);//boolean转int
-                r.setIstiwen((each.istiwen)?1:0);
-                r.setIsguli((each.isguli)?1:0);
+                String word = each.words.get(each.wuru_pos);
+                r.setIswuru((each.iswuru) ? 1 : 0);//boolean转int
+                r.setIstiwen((each.istiwen) ? 1 : 0);
+                r.setIsguli((each.isguli) ? 1 : 0);
 
                 //先判是不是侮辱
-                if(r.getIswuru()==1)
-                {r.setWuru(word);}//一个侮辱词
+                if (r.getIswuru() == 1) {
+                    r.setWuru(word);
+                }//一个侮辱词
                 else {
                     r.setWuru(null);
                 }
                 try {
 
-                    Date d=simpleDateFormat.parse(each.Get_Sentence_time());
-                    d.setTime(d.getTime()+ (1000 * 60 * 60 * 8)); //调整一下东八区时间 加八小时
+                    Date d = simpleDateFormat.parse(each.Get_Sentence_time());
+                    d.setTime(d.getTime() + (1000 * 60 * 60 * 8)); //调整一下东八区时间 加八小时
                     r.setStartTime(d);//时间格式转化 强制要求异常提醒
                 } catch (ParseException e) {
                     throw new RuntimeException(e);
                 }
 
                 //将list words拼成句子再存进表
-                String ju="";
-                for(String fenci :each.words)
-                {ju=ju+fenci;}
+                String ju = "";
+                for (String fenci : each.words) {
+                    ju = ju + fenci;
+                }
                 r.setTxtFile(ju);
 
                 //别忘记用户名
@@ -117,14 +167,14 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
 
             }
 
-           // record.setYusu(W.yusu);  没有语速
-           // W.
+            // record.setYusu(W.yusu);  没有语速
+            // W.
             //由于高频词返回一个list string  直接拼成一个大string即可
             //String gao=String.join(",", W.Get_gaopinci(5));
-           // record.setGaopin(gao);//默认返回前五大高频词
-      /*******
-       * 结束调用
-       * ***/
+            // record.setGaopin(gao);//默认返回前五大高频词
+            /*******
+             * 结束调用
+             * ***/
             return "SUCCESS";
         }
 

@@ -32,7 +32,7 @@ public interface RecordService /*extends IService<Record> */{
         录音备份：将录音文件备份到指定的存储设备中，确保数据的安全性和可靠性。
  */
 
-    public String recordAddService(Record record);
+    public String recordAddService(Record record) throws Exception;
 
     public List<Record> recordGetService(Record record);
 
