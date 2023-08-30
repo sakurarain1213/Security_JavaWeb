@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.anyic.Wenbenchuli.Sentence;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,9 +42,9 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
         //疯狂debug
 
 
-        if (record.getTxtFile()==null) {//现在拿的是整体
+        if (record.getMp3File()==null) {//现在拿的是整体
             //System.out.println(record.getTxtFile()+"?????????");//测试语句
-             return "缺少文本信息";
+             return "缺少语音文件";
         } //else if (record.getEndTime()==null) {
           //  return "缺少时间信息";//时间交给每句话处理
         //}
@@ -51,9 +52,20 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
             return "缺少用户信息";
         }
         else{
-            /***********************************************************
-             开始分割文本 连接句子表
+            /****
+             开始分割文本   注意放回到txtFile
              */
+
+            MultipartFile file;
+
+
+
+
+
+
+
+            //以上进行文件文本化
+
 
             String test=record.getTxtFile();
             //时间差要以分钟为单位的float   gettime方法返回ms
