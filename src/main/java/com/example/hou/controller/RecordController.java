@@ -33,12 +33,8 @@ localhost:8080/record/add   添加记录
 "txtFile":"19 28 51 test我想问一下，test是不是傻瓜？st 19 54 03 ，我想问问你？st"
 }
 
+现在改成传录音文件了
 
-                以下格式更符合后端实现   但是本项目开发不用
-                     "username":"6",
-                         "startTime":"2023-04-10 23:59:50",
-                         "endTime":"2023-04-10 23:59:59",
-                             "txtFile":"傻逼sdhabi"
 
 localhost:8080/record/get   查询全部记录
 {

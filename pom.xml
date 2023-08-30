@@ -140,7 +140,7 @@
 
 
     </build>
-
+    <packaging>jar</packaging>
 
 
 </project>
