@@ -20,19 +20,19 @@ import javax.servlet.http.HttpSession;
 /*
 
 
-localhost:8080/userInfo/login
+47.103.113.75:8080/userInfo/login    登录 强制需要所有信息
 {
     "username":"1",
     "password":"123"
 }
 
-localhost:8080/userInfo/register
+47.103.113.75:8080/userInfo/register   注册  强制需要所有信息
 {
     "username":"1",
     "password":"123"
 }
 
-localhost:8080/userInfo/update
+47.103.113.75:8080/userInfo/update  更新用户信息  只需要用户名 别的信息可有可无
 {
     "username":"1",
     "password":"123",
@@ -40,7 +40,7 @@ localhost:8080/userInfo/update
      "phone":"13301234566",
       "email":"1889900@163.com"
 }
-
+localhost
 
 */
 

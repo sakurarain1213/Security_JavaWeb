@@ -43,12 +43,9 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
 
     @Override
     public String recordAddService(Record record) throws Exception {
-
         //username   txt   start +end  time
         //add的时候不用判断已存在的教师记录 但是要判断非空
         //疯狂debug
-
-
         if (record.getMp3File()==null) {//现在拿的是整体
             //System.out.println(record.getTxtFile()+"?????????");//测试语句
              return "缺少语音文件";
@@ -62,8 +59,6 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
             /****
              开始分割文本   注意放回到txtFile    需要时间
              */
-
-
             Date date = new Date();
             //注意这个时间是格林尼治标准时间 东八区+8小时
             long time = date.getTime() + 8 * 3600000;
@@ -190,7 +185,7 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
     //查询 应该返回对象List 而不再是string
     public List<Record> recordGetService(Record record) {//传入的前端请求对象
            Date time1=record.getStartTime(); // 考虑要不要tostring
-           Date time2=record.getEndTime(); // 考虑要不要tostring
+           Date time2=record.getEndTime();
            String user=record.getUsername();
        //因为有可能为空 所以要返回临时的量
        // List<Record> t;
@@ -202,7 +197,6 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
         //temp.setEndTime(time2);
         //plus的条件构造器 查询条件
         //有可能出错 注意列名不能改
-
 
            if(time1==null ||time2 ==null ||user ==null)
            {

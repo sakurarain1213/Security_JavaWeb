@@ -63,7 +63,6 @@ public class UserInfoServiceImpl /* extends ServiceImpl<UserInfoMapper, UserInfo
 */
     @Override
     public String loginService(UserInfo userInfo) {
-
         UserInfo userE = userInfoMapper.searchByUsername(userInfo.getUsername());
         if (userE != null) {
             if (userE.getPassword().equals(userInfo.getPassword())) {

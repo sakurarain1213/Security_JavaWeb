@@ -26,17 +26,14 @@ import java.util.List;
  * @since 2023-04-08
  */
 /*
-localhost:8080/record/add   添加记录
-主要只用这一个实体类的功能
+47.103.113.75:8080/record/add   添加记录  需要用户名和文件
 {
 "username":"iraina",
-"txtFile":"19 28 51 test我想问一下，test是不是傻瓜？st 19 54 03 ，我想问问你？st"
+"mp3File":""    ？  传本地文件   具体格式待测试
 }
 
-现在改成传录音文件了
 
-
-localhost:8080/record/get   查询全部记录
+47.103.113.75:8080/record/get   查询全部记录    强制需要三条信息
 {
 "username":"iraina",
 "startTime":"2023-04-13 10:10:51",
@@ -52,14 +49,14 @@ localhost:8080/record/get   查询全部记录
 
 
 
-localhost:8080/record/getCount   查询词汇统计数量
+47.103.113.75:8080/record/getCount   查询词汇统计数量   强制需要三条信息  返回三元组
 {
 "username":"iraina",
 "startTime":"2023-04-13 10:10:51",
 "endTime":"2023-09-13 10:10:51"
 }
 
-localhost:8080/record/getText   查询词汇统计数量
+47.103.113.75:8080/record/getText   查询词汇统计数量   强制需要三条信息  返回文本
 {
 "username":"iraina",
 "startTime":"2023-04-13 10:10:51",

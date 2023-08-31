@@ -6,9 +6,10 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/sc?useUnicode=true & characterEncoding=utf-8 & allowPublicKeyRetrieval=true&useSSL=false & serverTimezone=UTC
+    url: jdbc:mysql://47.103.113.75:3306/sc?useUnicode=true & characterEncoding=utf-8 & allowPublicKeyRetrieval=true&useSSL=false & serverTimezone=UTC
     username: root
-    password: 123456
+    password: 123abc
+    #云服务器要去mysql更新权限
   mvc:
     format:
       date: yyyy-MM-dd HH:mm:ss
