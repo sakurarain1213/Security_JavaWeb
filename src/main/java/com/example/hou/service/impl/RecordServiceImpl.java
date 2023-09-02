@@ -200,6 +200,8 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
         }
 
         String filePath;
+
+          // 本地保存测试通过   接下来 放到服务器的目录上
         try {
             // 生成新的文件名：UUID + 系统时间 + 用户名 + 原始文件后缀
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
@@ -220,11 +222,50 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
                 }
             }
 
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "文件上传失败";
+        }
+
+       /* //以下是服务器版本
+        try {
+            // 生成新的文件名：UUID + 系统时间 + 用户名 + 原始文件后缀
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+            String formattedDate = dateFormat.format(new Date());
+            String newFileName = UUID.randomUUID().toString() + "_" + formattedDate + "_"
+                    + user.getUsername() + originalFilename.substring(originalFilename.lastIndexOf("."));
+
+
+            // 如果目录不存在，创建目录
+            File directory = new File("\\www\\wwwroot\\iat");
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+            //  构建目标文件路径  保存文件到目标路径
+            filePath = "\\www\\wwwroot\\iat\\" + newFileName;
+            File destFile = new File(filePath);
+
+            // 将上传的文件保存到本地
+            try (InputStream inputStream = file.getInputStream();
+                 FileOutputStream outputStream = new FileOutputStream(destFile)) {
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
             return "文件上传失败";
         }
+
+ */
+
+
+
+
+
 
         //开始解析文件文本  并保存到数据库
 

@@ -9,7 +9,9 @@ spring:
     url: jdbc:mysql://localhost:3306/sc?useUnicode=true & characterEncoding=utf-8 & allowPublicKeyRetrieval=true&useSSL=false & serverTimezone=UTC
     username: root
     password: 123456
+
     #云服务器要去mysql更新权限
+
   mvc:
     format:
       date: yyyy-MM-dd HH:mm:ss
@@ -17,9 +19,14 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB #配置文件上传属性
+
 #我们可以直接在配置文件中统一配置时间格式
   freemarker:
     cache: false
+
+
+
+
 #showSql
 # mybatis-plus配置
 mybatis-plus:

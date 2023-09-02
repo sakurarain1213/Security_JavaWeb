@@ -99,6 +99,10 @@ public class Wenbenchuli {
     }
     ArrayList<Sentence> Sens;//以句子为单位的list
     private static String basePath="C:\\Users\\w1625\\Desktop\\hou_fin\\src\\main\\java\\com\\anyic";
+
+    //服务器绝对路径  需要大改
+
+
     public int wuru_Count;//侮辱次数
     public int guli_Count;//鼓励次数
     public int wenda_Count;//提问次数
