@@ -250,8 +250,8 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
             //  构建目标文件路径  保存文件到目标路径
             filePath = "/www/wwwroot/iat/" + newFileName;  //47.103.113.75:8080/??
             File destFile = new File(filePath);
-            System.out.println("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
-            System.out.println(filePath);
+            //System.out.println("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
+            //System.out.println(filePath);
 
 
             // 将上传的文件保存
@@ -290,7 +290,7 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
         String ans = pcm.getWenben(pcm);
         String test = format + ans + "st";
 
-        System.out.println("xxxxxxxxxxxxxxxxxx");
+        //System.out.println("xxxxxxxxxxxxxxxxxx");
 
         Wenbenchuli W = new Wenbenchuli();
         W.GetString_analyse2(test);//改一下对应的文本分析     _____________________________________________BUG

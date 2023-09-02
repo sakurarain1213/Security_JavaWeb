@@ -181,11 +181,11 @@ public class Wenbenchuli {
     private void Load_dicts(String filename) throws IOException {
         Path path= Paths.get(basePath,"dicts/",filename);
 
-        System.out.println("111111111111111111111111");
+        //System.out.println("111111111111111111111111");
         WordDictionary.getInstance().loadUserDict(path);
-        System.out.println("22222222222222222222222");
+        //System.out.println("22222222222222222222222");
         wuru=readWordFile(basePath+"dicts/wuru.txt");//__________________
-        System.out.println("3333333333333333333333333");
+        //System.out.println("3333333333333333333333333");
 
         guli=readWordFile(basePath+"dicts/guli.txt");
         wenda=readWordFile(basePath+"dicts/wenda.txt");
