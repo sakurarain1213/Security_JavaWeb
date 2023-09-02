@@ -42,4 +42,9 @@ public interface RecordService /*extends IService<Record> */{
     public DTOCountNumber numberGetService(Record record);
 
     public List<DTOText> textGetService(Record record);
+
+
+    public String feedbackService(Record record) ;
+
+
 }

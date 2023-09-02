@@ -12,4 +12,10 @@ user.username: 输入用户名的值。
 
 云服务器的
 阿里云oss存储     待研究   还是要买存储  不要了
-Springboot部署到linux服务器进行静态资源映射并通过url访问
+Springboot部署到linux服务器进行静态资源映射并通过url访问：
+经验  yml配置web:
+uploadPath: /www/wwwroot/
+配置类加一个web配置
+
+访问硬盘不需要ip和端口  只需要绝对路径
+浏览器访问文件需要加ip  但是只要相对路径

@@ -72,7 +72,12 @@ import java.util.List;
 "endTime":"2023-09-13 10:10:51"
 }
 
-
+47.103.113.75:8080/record/feedback   查询教学反馈建议   强制需要三条信息  返回文本
+{
+"username":"iraina",
+"startTime":"2023-04-13 10:10:51",
+"endTime":"2023-09-13 10:10:51"
+}
 
 接口0  头像功能  文件上传思路：判断合法 随机命名放入服务器  得到地址放入数据库
 [添加筛选 统计的实现   包括三大词汇按天统计]  调整东八区时间
@@ -171,6 +176,13 @@ public class RecordController {
         }
     }
 
+
+
+    @RequestMapping("/feedback")
+    public Result feedback(@RequestBody Record record) {
+        String msg = recordService.feedbackService(record);
+            return ResultUtil.success(msg);
+    }
 
 
 }
