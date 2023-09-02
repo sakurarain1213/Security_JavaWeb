@@ -203,9 +203,10 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
             // return "缺少用户名信息";
             return null;
         }
-
+        //System.out.println("111111111111111111");
         String filePath;
-
+        double secends = 1.0;
+        //System.out.println("222222222222222222222222");
         /*  // 本地保存测试通过   接下来 放到服务器的目录上
         try {
             // 生成新的文件名：UUID + 系统时间 + 用户名 + 原始文件后缀
@@ -233,6 +234,8 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
         }
             */
         //以下是服务器版本
+
+        File destFile;
         try {
             // 生成新的文件名：UUID + 系统时间 + 用户名 + 原始文件后缀
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
@@ -249,7 +252,7 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
             }
             //  构建目标文件路径  保存文件到目标路径
             filePath = "/www/wwwroot/iat/" + newFileName;  //47.103.113.75:8080/??
-            File destFile = new File(filePath);
+            destFile = new File(filePath);
             //System.out.println("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
             //System.out.println(filePath);
 
@@ -269,6 +272,17 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
             //return "文件上传失败";
             return null;
         }
+
+        //在文件上传结束的前提下   再读取大小
+        // 文件现在已经存在，读取其大小
+        long fileSizeInBytes = destFile.length();
+        //System.out.println(fileSizeInBytes + "是否因为文件大小得不到 才会=0");//!!!!!!!!!!!!!!!!!!!!!
+        double fileSizeInKB = (double) fileSizeInBytes / 1024; // 将字节转换为KB
+        //System.out.println(fileSizeInKB + "kb");
+        secends = fileSizeInKB / 32;
+        //System.out.println(secends);
+        //语速计算  用yusu存     这个音频文件  1s =32kB
+        //System.out.println("33333333333333333333");
 
 
         //
@@ -329,6 +343,10 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
             }
             r.setTxtFile(ju);
             r.setUsername(user.getUsername());
+
+
+            r.setYusu((int) (60 * ju.length() / secends));  //每分钟语速
+
             recordMapper.insert(r);
         }
 
@@ -411,9 +429,52 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
                 .between("start_time", time1, time2);
         //  q1= qw.eq("iswuru",1);尝试分阶段查询 提高性能   但是似乎不行
 
+
+        //求一下语速
+        /*
+        QueryWrapper<Record> qw4 = new QueryWrapper<>();
+        qw4
+                .eq("username", user)
+                .between("start_time", time1, time2);
+
+        int totalWords = 0;
+        // 计算时间差（毫秒）
+        long timeDifferenceMillis = time2.getTime() - time1.getTime();
+        // 毫秒转分钟
+        long minutesDifference = timeDifferenceMillis / (60 * 1000);
+
+
+        List<Record> result =recordMapper.selectList(qw4);
+        for (Record r : result) {
+            String txt = r.getTxtFile();
+
+            //System.out.println(txt);
+            //System.out.println( totalWords);
+
+            totalWords=totalWords+txt.length();
+        }
+         */
+        QueryWrapper<Record> qw4 = new QueryWrapper<>();
+        qw4
+                .eq("username", user)
+                .between("start_time", time1, time2);
+
+        int totalLine = recordMapper.selectCount(qw4);
+        Double totalYusu=0.0;
+        List<Record> result =recordMapper.selectList(qw4);
+        for (Record r : result) {
+            totalYusu+=r.getYusu();
+            //System.out.println(totalYusu);
+        }
+
+
+
         c.set(recordMapper.selectCount(qw1),
                 recordMapper.selectCount(qw2),
-                recordMapper.selectCount(qw3));
+                recordMapper.selectCount(qw3),
+
+                (int)(totalYusu/totalLine)
+        );
         //recordMapper.selectCount(q1)用于返回查询数量
 
         return c;
@@ -481,9 +542,14 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
         else if (c.getTiwen() < 5) feedback = feedback + "提问" + c.getTiwen() + "次，需要增加提问次数，增加互动;";
         else feedback = feedback + "提问" + c.getTiwen() + "次，互动节奏良好;";
 
-        if (c.getGuli() > 10) feedback = feedback + "鼓励" + c.getTiwen() + "次，需要增加教学内容;";
-        else if (c.getGuli() < 5) feedback = feedback + "鼓励" + c.getTiwen() + "次，需要增加鼓励次数，增强学生信心;";
-        else feedback = feedback + "鼓励" + c.getTiwen() + "次，鼓励适当，继续保持;";
+        if (c.getGuli() > 10) feedback = feedback + "鼓励" + c.getGuli() + "次，需要增加教学内容;";
+        else if (c.getGuli() < 5) feedback = feedback + "鼓励" + c.getGuli() + "次，需要增加鼓励次数，增强学生信心;";
+        else feedback = feedback + "鼓励" + c.getGuli() + "次，鼓励适当，继续保持;";
+
+        if (c.getYusu() <130) feedback = feedback + "语速" + c.getYusu() + "字/min,需要全力加快语速;";
+        else if (c.getYusu() <170) feedback = feedback + "语速" + c.getYusu() + "字/min,需要稍微加快语速;";
+        else if (c.getYusu() <200) feedback = feedback + "语速" + c.getYusu() + "字/min,语速合适，继续保持;";
+        else  feedback = feedback + "语速" + c.getYusu() + "字/min,语速太快,需要放慢语速;";
 
 
         return feedback;

@@ -90,8 +90,9 @@ public class Record {
     //一个字段存储Java对象序列化后的字段
     //因为不能直接用字符串，所以用成了字节数组（Java）(但是不方便数据单独运算)
     //@TableField(value="score",typeHandler = FastjsonTypeHandler.class)
-    private String score;//备注  json在实体类里还是用string  但是需要注解  现在尝试直接存一个对象
-
+    @TableField("yusu")
+    private Integer yusu;//备注  json在实体类里还是用string  但是需要注解  现在尝试直接存一个对象
+    //改成语速了！！！！  float要大写！！！！！！
 /*
 *     Fastjson 是阿里巴巴提供的一个Java语言编写的高性能功能完善的 JSON 库，是目前Java语言中最快的 JSON 库，可以实现 Java 对象和 JSON 字符串的相互转换。
       序列化： 将 集合数据转换为 json 数据；
@@ -154,5 +155,23 @@ mysql可以存储Java对象。
      * 换成ps  备注
      */
     private String ps;
+
+
+    /*    慎用float！！！ 会有infinity溢出错误
+    public void setYusu(Float yusu) {
+        this.yusu= debug(yusu);
+    }
+
+    public Float debug(Float f){
+        if (Float.isInfinite(f)) {
+            f = 0f;
+        }
+        System.out.println("float value = " + f);
+        return f;
+    }
+      */
+
+
+
 
 }

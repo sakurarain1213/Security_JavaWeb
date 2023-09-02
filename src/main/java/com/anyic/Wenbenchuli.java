@@ -99,7 +99,7 @@ public class Wenbenchuli {
     }
     ArrayList<Sentence> Sens;//以句子为单位的list
 
-    private static String basePath="/www/wwwroot/";
+    private static final String basePath="/www/wwwroot/";
 
     //服务器绝对路径  需要大改
 
