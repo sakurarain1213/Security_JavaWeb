@@ -24,25 +24,23 @@ import java.util.List;
  * @since 2023-04-08
  */
 /*
-47.103.113.75:8080/record/add   添加记录  需要用户名和文件
-{
-"username":"iraina",
-"mp3File":""    ？  传本地文件   具体格式待测试
-}
+
+总览：大部分接口都传json格式
+注意url的写法  47.103.113.75或者http://47.103.113.75 都可以
+但是http不能加s  服务器不支持
+
+47.103.113.75:8080/record/add 废弃此方法
 //上述方法被替换为
-
-47.103.113.75:8080/record/upload
-{
-
-}
-
-
-
-
-
-
-
-
+47.103.113.75:8080/record/upload 添加记录  需要用户名和文件
+注意只有这个接口不传json   要用POST 传递form-data  信息
+前端应该写成
+   const formData = new FormData();
+      formData.append("file", this.file);
+      formData.append("username", this.username);
+      axios
+        .post("http:// 47.103.113.75:8080/record/upload", formData)
+        .then((response) => {
+...
 
 
 47.103.113.75:8080/record/get   查询全部记录    强制需要三条信息
@@ -57,7 +55,6 @@ import java.util.List;
     "startTime":"2023-04-06 23:59:59",
     "endTime":"2023-04-09 23:59:59"
 }
-
 
 
 

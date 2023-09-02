@@ -62,7 +62,8 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
              */
             Date date = new Date();
             //注意这个时间是格林尼治标准时间 东八区+8小时
-            long time = date.getTime() + 8 * 3600000;
+            //long time = date.getTime() + 8 * 3600000;
+            long time = date.getTime() ;
             date.setTime(time);
             SimpleDateFormat dateFormat = new SimpleDateFormat("HH mm ss "); //"yyyy-MM-dd HH:mm:ss"
             String format = dateFormat.format(date);
@@ -144,7 +145,8 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
                 try {
 
                     Date d = simpleDateFormat.parse(each.Get_Sentence_time());
-                    d.setTime(d.getTime() + (1000 * 60 * 60 * 8)); //调整一下东八区时间 加八小时
+                    //d.setTime(d.getTime() + (1000 * 60 * 60 * 8)); //调整一下东八区时间 加八小时
+                    d.setTime(d.getTime() );
                     r.setStartTime(d);//时间格式转化 强制要求异常提醒
                 } catch (ParseException e) {
                     throw new RuntimeException(e);
@@ -200,8 +202,10 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
         String filePath;
         try {
             // 生成新的文件名：UUID + 系统时间 + 用户名 + 原始文件后缀
-            String newFileName = UUID.randomUUID().toString() + "_" + System.currentTimeMillis()
-                    + "_" + user.getUsername() + originalFilename.substring(originalFilename.lastIndexOf("."));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+            String formattedDate = dateFormat.format(new Date());
+            String newFileName = UUID.randomUUID().toString() + "_" + formattedDate + "_"
+                    + user.getUsername() + originalFilename.substring(originalFilename.lastIndexOf("."));
             // 构建目标文件路径
             filePath = "resource\\iat\\" + newFileName;
             File destFile = new File(filePath);
@@ -226,7 +230,7 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
 
 
         Date date = new Date();
-        long time = date.getTime() + 8 * 3600000;
+        long time = date.getTime();//+ 8 * 3600000;
         date.setTime(time);
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH mm ss "); //"yyyy-MM-dd HH:mm:ss"
         String format = dateFormat.format(date);
