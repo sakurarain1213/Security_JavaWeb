@@ -1,10 +1,10 @@
 package com.example.hou.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
-import com.example.hou.entity.CountNumber;
+import com.example.hou.entity.DTOCountNumber;
+import com.example.hou.entity.DTOUser;
 import com.example.hou.entity.Record;
-import com.example.hou.entity.Text;
-import com.example.hou.entity.UserInfo;
+import com.example.hou.entity.DTOText;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -33,10 +33,13 @@ public interface RecordService /*extends IService<Record> */{
  */
 
     public String recordAddService(Record record) throws Exception;
+    //测试用一下下面的接口
+    public String recordUpload(MultipartFile file, DTOUser user) throws Exception;
+
 
     public List<Record> recordGetService(Record record);
 
-    public CountNumber numberGetService(Record record);
+    public DTOCountNumber numberGetService(Record record);
 
-    public List<Text> textGetService(Record record);
+    public List<DTOText> textGetService(Record record);
 }

@@ -40,6 +40,13 @@ import javax.servlet.http.HttpSession;
      "phone":"13301234566",
       "email":"1889900@163.com"
 }
+
+47.103.113.75:8080/userInfo/get    拿到用户信息
+{
+    "username":"1"
+}
+
+
 localhost
 
 */
@@ -137,6 +144,18 @@ public class UserInfoController {
             return ResultUtil.success("修改成功");}
         else{ return ResultUtil.error(msg);}
     }
+
+
+    @RequestMapping("/get")
+    public Result getuser(@RequestBody UserInfo userInfo) {
+        UserInfo u = userInfoService.getuserService(userInfo);
+        if (u!=null) {
+            return ResultUtil.success(u);
+        } else {
+            return ResultUtil.error("用户名不存在");
+        }
+    }
+
       /*
     @RequestMapping("/register")
     @ResponseBody

@@ -11,7 +11,7 @@ import java.util.Date;
  *
  临时类  用于 文本内容统计返回
  */
-public class Text {
+public class DTOText {
 
     private String txtFile;
 

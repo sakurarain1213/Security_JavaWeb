@@ -135,7 +135,12 @@ public class UserInfoServiceImpl /* extends ServiceImpl<UserInfoMapper, UserInfo
     }
 
 
+        @Override
+        public UserInfo getuserService(UserInfo user){
 
+            return userInfoMapper.searchByUsername(user.getUsername());
+
+        }
 
 
         //顺便测试wrapper条件构造器的用法

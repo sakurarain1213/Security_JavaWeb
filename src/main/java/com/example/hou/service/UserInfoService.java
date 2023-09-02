@@ -16,4 +16,7 @@ public interface UserInfoService /*extends IService<UserInfo>*/ {
     public String updateService(UserInfo user);
 
 
+    public UserInfo getuserService(UserInfo user);
+
+
 }

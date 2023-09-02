@@ -1,19 +1,17 @@
 package com.example.hou.controller;
 
 
-import com.example.hou.entity.CountNumber;
+import com.example.hou.entity.DTOCountNumber;
+import com.example.hou.entity.DTOUser;
 import com.example.hou.entity.Record;
-import com.example.hou.entity.Text;
-import com.example.hou.entity.UserInfo;
+import com.example.hou.entity.DTOText;
 import com.example.hou.result.Result;
 import com.example.hou.result.ResultUtil;
 import com.example.hou.service.RecordService;
-import com.example.hou.service.UserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -92,6 +90,19 @@ public class RecordController {
         }
     }
 
+    //尝试另外方式上传文件
+    @PostMapping("/upload")
+    public Result uploadFile(@RequestParam("file") MultipartFile file,
+                             @ModelAttribute DTOUser user) throws Exception {
+        String msg = recordService.recordUpload(file, user);
+        if (("SUCCESS").equals(msg)) {
+            return ResultUtil.success("语音文件上传成功");
+        } else {
+            return ResultUtil.error(msg);
+        }
+    }
+
+
 
     @RequestMapping("/get")
     //因为返回的是一个list  所以消息需要根据新的格式自定义
@@ -115,7 +126,7 @@ public class RecordController {
     @RequestMapping("/getCount")
     //因为返回的是一个list  所以消息需要根据新的格式自定义
     public Result recordGetCount(@RequestBody Record record) {
-        CountNumber c = recordService.numberGetService(record);
+        DTOCountNumber c = recordService.numberGetService(record);
         if (c!=null) {
             //重新打开ResultUtil的封装
             Result r = new Result();
@@ -133,7 +144,7 @@ public class RecordController {
     @RequestMapping("/getText")
     //因为返回的是一个list  所以消息需要根据新的格式自定义
     public Result recordGetText(@RequestBody Record record) {
-        List<Text> t = recordService.textGetService(record);
+        List<DTOText> t = recordService.textGetService(record);
         if (t!=null) {
             //重新打开ResultUtil的封装
             Result r = new Result();

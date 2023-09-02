@@ -1,15 +1,13 @@
 package com.example.hou.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
 临时类  用于计数结果返回
  */
 @Data//临时类也需要注解
 
-public class CountNumber {
+public class DTOCountNumber {
 
     Integer wuru;
     Integer guli;

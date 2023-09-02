@@ -2,9 +2,10 @@ package com.example.hou.service.impl;
 
 import com.anyic.Wenbenchuli;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.example.hou.entity.CountNumber;
+import com.example.hou.entity.DTOCountNumber;
+import com.example.hou.entity.DTOUser;
 import com.example.hou.entity.Record;
-import com.example.hou.entity.Text;
+import com.example.hou.entity.DTOText;
 import com.example.hou.mapper.RecordMapper;
 import com.example.hou.service.RecordService;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
@@ -181,6 +182,107 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
 }
 
 
+    @Override
+    public String recordUpload(MultipartFile file, DTOUser user) throws Exception{
+
+        if (file == null || file.isEmpty()) {
+            return "请上传文件";
+        }
+        // 检查后缀
+        String originalFilename = file.getOriginalFilename();
+        if (!originalFilename.endsWith(".pcm")) {
+            return "请上传pcm格式的文件";
+        }
+        if (user == null || user.getUsername() == null) {
+            return "缺少用户名信息";
+        }
+
+        String filePath;
+        try {
+            // 生成新的文件名：UUID + 系统时间 + 用户名 + 原始文件后缀
+            String newFileName = UUID.randomUUID().toString() + "_" + System.currentTimeMillis()
+                    + "_" + user.getUsername() + originalFilename.substring(originalFilename.lastIndexOf("."));
+            // 构建目标文件路径
+            filePath = "resource\\iat\\" + newFileName;
+            File destFile = new File(filePath);
+
+            // 将上传的文件保存到本地
+            try (InputStream inputStream = file.getInputStream();
+                 FileOutputStream outputStream = new FileOutputStream(destFile)) {
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "文件上传失败";
+        }
+
+        //开始解析文件文本  并保存到数据库
+
+
+        Date date = new Date();
+        long time = date.getTime() + 8 * 3600000;
+        date.setTime(time);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH mm ss "); //"yyyy-MM-dd HH:mm:ss"
+        String format = dateFormat.format(date);
+        //得到时分秒  format
+
+        String Pcmfile = filePath;//保存到路径   .pcm 格式名已经有了
+        WebIATWS pcm = new WebIATWS(Pcmfile);
+        String ans = pcm.getWenben(pcm);
+        String test = format + ans + "st";
+
+        Wenbenchuli W = new Wenbenchuli();
+        W.GetString_analyse2(test);//改一下对应的文本分析
+        ArrayList<Sentence> s = W.Get_AllSentences();
+
+        Record r = new Record();//临时插入变量
+
+        //时间格式转化
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //进行遍历
+        for (Sentence each : s) {
+            //临时词listt   用下标返回侮辱词
+            String word = each.words.get(each.wuru_pos);
+            r.setIswuru((each.iswuru) ? 1 : 0);//boolean转int
+            r.setIstiwen((each.istiwen) ? 1 : 0);
+            r.setIsguli((each.isguli) ? 1 : 0);
+            //先判是不是侮辱
+            if (r.getIswuru() == 1) {
+                r.setWuru(word);
+            }//一个侮辱词
+            else {
+                r.setWuru(null);
+            }
+            try {
+                Date d = simpleDateFormat.parse(each.Get_Sentence_time());
+                d.setTime(d.getTime() + (1000 * 60 * 60 * 8)); //调整一下东八区时间 加八小时
+                r.setStartTime(d);//时间格式转化 强制要求异常提醒
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            //将list words拼成句子再存进表
+            String ju = "";
+            for (String fenci : each.words) {
+                ju = ju + fenci;
+            }
+            r.setTxtFile(ju);
+            r.setUsername(user.getUsername());
+            recordMapper.insert(r);
+        }
+
+        /*
+         结束调用
+         */
+        return "SUCCESS";
+
+    }
+
     @Override//通过时间范围和username拿语音记录
     //查询 应该返回对象List 而不再是string
     public List<Record> recordGetService(Record record) {//传入的前端请求对象
@@ -225,8 +327,8 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
 
 
     @Override
-    public CountNumber numberGetService(Record record) {
-        CountNumber c=new CountNumber();
+    public DTOCountNumber numberGetService(Record record) {
+        DTOCountNumber c=new DTOCountNumber();
         c.initialize();
 
         Date time1=record.getStartTime();
@@ -265,7 +367,7 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
 
 
     @Override
-    public List<Text> textGetService(Record record){
+    public List<DTOText> textGetService(Record record){
         Date time1=record.getStartTime();
         Date time2=record.getEndTime();
         String user=record.getUsername();
@@ -282,9 +384,9 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
         ;
         //然后得到记录行
         List<Record> l = recordMapper.selectList(qw);
-        List<Text> lText = new ArrayList<>();
+        List<DTOText> lText = new ArrayList<>();
         for(Record each : l ){
-                Text temp = new Text();
+                DTOText temp = new DTOText();
                 temp.setStartTime(each.getStartTime());
                 temp.setWord(each.getWuru());
                 temp.setTxtFile(each.getTxtFile());
