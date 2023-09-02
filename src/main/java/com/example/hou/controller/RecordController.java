@@ -29,6 +29,20 @@ import java.util.List;
 "username":"iraina",
 "mp3File":""    ？  传本地文件   具体格式待测试
 }
+//上述方法被替换为
+
+47.103.113.75:8080/record/upload
+{
+
+}
+
+
+
+
+
+
+
+
 
 
 47.103.113.75:8080/record/get   查询全部记录    强制需要三条信息
@@ -94,9 +108,10 @@ public class RecordController {
     @PostMapping("/upload")
     public Result uploadFile(@RequestParam("file") MultipartFile file,
                              @ModelAttribute DTOUser user) throws Exception {
+        //注意这个方法 不要传json  要用form-data
         String msg = recordService.recordUpload(file, user);
         if (("SUCCESS").equals(msg)) {
-            return ResultUtil.success("语音文件上传成功");
+            return ResultUtil.success("语音文件解析成功");
         } else {
             return ResultUtil.error(msg);
         }
