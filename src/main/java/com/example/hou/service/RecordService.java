@@ -34,7 +34,7 @@ public interface RecordService /*extends IService<Record> */{
 
     public String recordAddService(Record record) throws Exception;
     //测试用一下下面的接口
-    public String recordUpload(MultipartFile file, DTOUser user) throws Exception;
+    public Record recordUpload(MultipartFile file, DTOUser user) throws Exception;
 
 
     public List<Record> recordGetService(Record record);

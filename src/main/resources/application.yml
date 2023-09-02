@@ -1,4 +1,5 @@
 server:
+
   port: 8080
 #防止8080和8081冲突
 
@@ -6,10 +7,9 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/sc?useUnicode=true & characterEncoding=utf-8 & allowPublicKeyRetrieval=true&useSSL=false & serverTimezone=UTC
+    url: jdbc:mysql://47.103.113.75:3306/sc?useUnicode=true & characterEncoding=utf-8 & allowPublicKeyRetrieval=true&useSSL=false & serverTimezone=UTC
     username: root
-    password: 123456
-
+    password: 123abc
     #云服务器要去mysql更新权限
 
   mvc:
@@ -20,11 +20,21 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB #配置文件上传属性
 
+
 #我们可以直接在配置文件中统一配置时间格式
   freemarker:
     cache: false
 
 
+
+
+  web:
+    resources:
+      static-locations: file:www/wwwroot/ , classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/
+#服务器的静态资源访问配置   其实默认放在resources/static下即可  通过ip地址:端口 访问
+
+web:
+  uploadPath: /www/wwwroot/ # Win: D:/IdeaProjects/forum/images/
 
 
 #showSql
@@ -40,3 +50,4 @@ mybatis-plus:
   #xml扫描，多个目录用逗号或者分号分隔（告诉 Mapper 所对应的 XML 文件位置）
   mapperLocations: classpath*:mapper/**Mapper.xml
 #尤其注意这个路径问题啊啊啊啊啊啊啊
+

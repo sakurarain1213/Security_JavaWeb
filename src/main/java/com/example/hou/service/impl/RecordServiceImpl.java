@@ -185,23 +185,29 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
 
 
     @Override
-    public String recordUpload(MultipartFile file, DTOUser user) throws Exception{
+    public Record recordUpload(MultipartFile file, DTOUser user) throws Exception{
 
         if (file == null || file.isEmpty()) {
-            return "请上传文件";
+            return null;
+            //缺少文件
         }
         // 检查后缀
         String originalFilename = file.getOriginalFilename();
+
+        /*
         if (!originalFilename.endsWith(".pcm")) {
             return "请上传pcm格式的文件";
         }
+        */
+
         if (user == null || user.getUsername() == null) {
-            return "缺少用户名信息";
+           // return "缺少用户名信息";
+            return null;
         }
 
         String filePath;
 
-          // 本地保存测试通过   接下来 放到服务器的目录上
+        /*  // 本地保存测试通过   接下来 放到服务器的目录上
         try {
             // 生成新的文件名：UUID + 系统时间 + 用户名 + 原始文件后缀
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
@@ -226,26 +232,31 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
             e.printStackTrace();
             return "文件上传失败";
         }
-
-       /* //以下是服务器版本
+            */
+        //以下是服务器版本
         try {
             // 生成新的文件名：UUID + 系统时间 + 用户名 + 原始文件后缀
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
             String formattedDate = dateFormat.format(new Date());
             String newFileName = UUID.randomUUID().toString() + "_" + formattedDate + "_"
-                    + user.getUsername() + originalFilename.substring(originalFilename.lastIndexOf("."));
+                    + user.getUsername() + ".pcm";
+            /*originalFilename.substring(originalFilename.lastIndexOf(".")*/
 
 
             // 如果目录不存在，创建目录
-            File directory = new File("\\www\\wwwroot\\iat");
+            File directory = new File("/www/wwwroot/iat");
             if (!directory.exists()) {
                 directory.mkdirs();
             }
             //  构建目标文件路径  保存文件到目标路径
-            filePath = "\\www\\wwwroot\\iat\\" + newFileName;
+            filePath = "/www/wwwroot/iat/" + newFileName;  //47.103.113.75:8080/??
             File destFile = new File(filePath);
+            System.out.println("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
+            System.out.println(filePath);
 
-            // 将上传的文件保存到本地
+
+
+            // 将上传的文件保存
             try (InputStream inputStream = file.getInputStream();
                  FileOutputStream outputStream = new FileOutputStream(destFile)) {
                 byte[] buffer = new byte[1024];
@@ -257,15 +268,17 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
 
         } catch (IOException e) {
             e.printStackTrace();
-            return "文件上传失败";
+            //return "文件上传失败";
+            return null;
         }
 
- */
 
 
 
 
 
+        //
+       // return "文件上传成功  但是解析部分还在测试嘤";
 
         //开始解析文件文本  并保存到数据库
 
@@ -277,16 +290,21 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
         String format = dateFormat.format(date);
         //得到时分秒  format
 
+
         String Pcmfile = filePath;//保存到路径   .pcm 格式名已经有了
         WebIATWS pcm = new WebIATWS(Pcmfile);
         String ans = pcm.getWenben(pcm);
         String test = format + ans + "st";
 
+        System.out.println("xxxxxxxxxxxxxxxxxx");
+
         Wenbenchuli W = new Wenbenchuli();
-        W.GetString_analyse2(test);//改一下对应的文本分析
+        W.GetString_analyse2(test);//改一下对应的文本分析     _____________________________________________BUG
         ArrayList<Sentence> s = W.Get_AllSentences();
 
         Record r = new Record();//临时插入变量
+
+
 
         //时间格式转化
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -324,7 +342,7 @@ public class RecordServiceImpl /*extends ServiceImpl<RecordMapper, Record> */imp
         /*
          结束调用
          */
-        return "SUCCESS";
+        return r;
 
     }
 

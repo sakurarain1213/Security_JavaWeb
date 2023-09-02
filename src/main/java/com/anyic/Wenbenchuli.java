@@ -1,15 +1,13 @@
 package com.anyic;
 import com.huaban.analysis.jieba.JiebaSegmenter;
 import com.huaban.analysis.jieba.WordDictionary;
-import java.io.File;
+
+import java.io.*;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.HashMap;
@@ -77,6 +75,8 @@ public class Wenbenchuli {
         public int wuru_pos;//表示侮辱词的位置，在words中的下标
 
 
+
+
         String duixiang;//对象，表示这句话的对象，"0"表示对象不是学生，其它表示对象名
         String duixiang2;//2号对象，表示提问句中的对象
         Sentence(){
@@ -98,7 +98,8 @@ public class Wenbenchuli {
         }
     }
     ArrayList<Sentence> Sens;//以句子为单位的list
-    private static String basePath="C:\\Users\\w1625\\Desktop\\hou_fin\\src\\main\\java\\com\\anyic";
+
+    private static String basePath="/www/wwwroot/";
 
     //服务器绝对路径  需要大改
 
@@ -150,9 +151,14 @@ public class Wenbenchuli {
     }
 
     //将文本内容读取到Set中，用于加载词库
-    private Set<String> readWordFile(String filepath){
+    private Set<String> readWordFile(String filepath) throws IOException {
         Set<String> wordSet=null;
         File file=new File(filepath);
+        file.createNewFile();
+        //if(!file.exists()) System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
+
+
         try {
             InputStreamReader read = new InputStreamReader(new FileInputStream(file), "utf-8");
             if (file.isFile() && file.exists()) {
@@ -172,14 +178,19 @@ public class Wenbenchuli {
     }
 
     //加载各个字典
-    private void Load_dicts(String filename){
-        Path path= Paths.get(basePath,"\\dicts\\",filename);
+    private void Load_dicts(String filename) throws IOException {
+        Path path= Paths.get(basePath,"dicts/",filename);
+
+        System.out.println("111111111111111111111111");
         WordDictionary.getInstance().loadUserDict(path);
-        wuru=readWordFile("src/main/java/com/anyic/dicts/wuru.txt");
-        guli=readWordFile("src/main/java/com/anyic/dicts/guli.txt");
-        wenda=readWordFile("src/main/java/com/anyic/dicts/wenda.txt");
-        stop_words=readWordFile("src/main/java/com/anyic/dicts/stop_words.txt");
-        duixiang=readWordFile("src/main/java/com/anyic/dicts/duixiang.txt");
+        System.out.println("22222222222222222222222");
+        wuru=readWordFile(basePath+"dicts/wuru.txt");//__________________
+        System.out.println("3333333333333333333333333");
+
+        guli=readWordFile(basePath+"dicts/guli.txt");
+        wenda=readWordFile(basePath+"dicts/wenda.txt");
+        stop_words=readWordFile(basePath+"dicts/stop_words.txt");
+        duixiang=readWordFile(basePath+"dicts/duixiang.txt");
     }
 
     //输出String中含有多少文字
@@ -344,7 +355,7 @@ public class Wenbenchuli {
     }
 
     //对文本进行分析，获得各项指标
-    public void GetString_analyse(String data,float time){
+    public void GetString_analyse(String data,float time) throws IOException {
         Load_dicts("dict.txt");
         Get_yusu(data,time);
 
@@ -376,7 +387,7 @@ public class Wenbenchuli {
 
 
     }
-    public void GetString_analyse2(String data){
+    public void GetString_analyse2(String data) throws IOException {
         Load_dicts("dict.txt");
         LocalDate date = LocalDate.now(); // get the current date
         DateTimeFormatter formatter=DateTimeFormatter.ofPattern("yyyy-MM-dd");

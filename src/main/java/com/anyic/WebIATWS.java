@@ -30,7 +30,9 @@ public class WebIATWS extends WebSocketListener {
 	private static final String appid = "4ceb57b4"; //在控制台-我的应用获取
 	private static final String apiSecret = "YWQ4MDAwMzJlOWY5NWQ4OTlkY2ExN2I3"; //在控制台-我的应用-语音听写（流式版）获取
 	private static final String apiKey = "a7a57ea357a0c5c3725be797b4437c5b"; //在控制台-我的应用-语音听写（流式版）获取
-    private static String file = "resource\\iat\\16k_10.pcm"; // 中文
+
+
+    private static String file = "/www/wwwroot/iat/16k_10.pcm"; // 中文
     public static final int StatusFirstFrame = 0;
     public static final int StatusContinueFrame = 1;
     public static final int StatusLastFrame = 2;
@@ -83,7 +85,7 @@ public class WebIATWS extends WebSocketListener {
                             //business.addProperty("language", "ja_jp");//日语，在控制台可添加试用或购买
                             //business.addProperty("language", "ko_kr");//韩语，在控制台可添加试用或购买
                             //business.addProperty("language", "ru-ru");//俄语，在控制台可添加试用或购买
-                            business.addProperty("domain", "iat");
+                            business.addProperty("domain", "static/iat");
                             business.addProperty("accent", "mandarin");//中文方言请在控制台添加试用，添加后即展示相应参数值
                             //business.addProperty("nunum", 0);
                             //business.addProperty("ptt", 0);//标点符号

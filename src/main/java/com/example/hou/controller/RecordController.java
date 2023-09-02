@@ -106,11 +106,11 @@ public class RecordController {
     public Result uploadFile(@RequestParam("file") MultipartFile file,
                              @ModelAttribute DTOUser user) throws Exception {
         //注意这个方法 不要传json  要用form-data
-        String msg = recordService.recordUpload(file, user);
-        if (("SUCCESS").equals(msg)) {
-            return ResultUtil.success("语音文件解析成功");
+        Record r = recordService.recordUpload(file, user);
+        if (r!=null) {
+            return ResultUtil.success(r);
         } else {
-            return ResultUtil.error(msg);
+            return ResultUtil.error("缺少文件或用户名或上传失败");
         }
     }
 
