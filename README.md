@@ -14,6 +14,7 @@ Redis 7.2.3
 Java项目一键部署 3.5  
 phpMyAdmin 5.0  
   
+
 模块：  
 见pom配置文件  
   
