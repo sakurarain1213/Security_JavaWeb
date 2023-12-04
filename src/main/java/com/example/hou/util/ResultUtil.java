@@ -1,5 +1,8 @@
-package com.example.hou.result;
+package com.example.hou.util;
 
+
+import com.example.hou.result.Result;
+import com.example.hou.result.ResultCode;
 
 public class ResultUtil {
     /**

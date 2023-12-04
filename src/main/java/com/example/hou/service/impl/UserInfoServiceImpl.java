@@ -62,16 +62,19 @@ public class UserInfoServiceImpl /* extends ServiceImpl<UserInfoMapper, UserInfo
     }
 */
     @Override
-    public String loginService(UserInfo userInfo) {
+    public UserInfo loginService(UserInfo userInfo) {
         UserInfo userE = userInfoMapper.searchByUsername(userInfo.getUsername());
         if (userE != null) {
             if (userE.getPassword().equals(userInfo.getPassword())) {
-                return "SUCCESS";
+                //return "SUCCESS";
+                return userE;
             } else {
-                return "密码错误";
+                userE.setUsername("密码错误");return userE;
+                //return "密码错误";
             }
         }
-        return "此用户不存在";
+        //return "此用户不存在";
+       return null;
     }
 
     /*

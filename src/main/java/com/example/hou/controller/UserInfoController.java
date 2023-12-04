@@ -1,19 +1,12 @@
 package com.example.hou.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.api.R;
 import com.example.hou.entity.UserInfo;
 import com.example.hou.result.Result;
-import com.example.hou.result.ResultUtil;
+import com.example.hou.util.ResultUtil;
 import com.example.hou.service.UserInfoService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 
 
@@ -73,11 +66,21 @@ public class UserInfoController {
 //@ResponseBody//重点debug区域  即只能在params不能在body传递json的问题  这一行无所谓
     //下面把requestbody删除 则至少用params可以 这个符合简单教程
    public Result login(@RequestBody UserInfo userInfo) {
-       String msg = userInfoService.loginService(userInfo);
-        if (("SUCCESS").equals(msg)) {
-            return ResultUtil.success("登录成功");
-        } else {
-            return ResultUtil.error(msg);
+        UserInfo u = userInfoService.loginService(userInfo);
+        if (u.getUsername().equals("密码错误")) {
+            return ResultUtil.error("密码错误");
+        } else if(u==null) {
+            return ResultUtil.error("此用户不存在");
+        }
+        else{
+            Result r = new Result();
+            r.setCode(200);
+            r.setMsg("登录成功");
+            r.setData(u);
+
+
+
+            return r;
         }
     }
     /*   登录用string的版本  作为参考 最好全用对象

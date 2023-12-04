@@ -9,7 +9,7 @@ import com.example.hou.entity.UserInfo;
 
 public interface UserInfoService /*extends IService<UserInfo>*/ {
 
-    public String loginService(UserInfo user);
+    public UserInfo loginService(UserInfo user);
 
     public String registerService(UserInfo user);
 

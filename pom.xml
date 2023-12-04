@@ -27,18 +27,62 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <!--   有plus  一定要把本身删除
+
+        <!--   有mybatis plus  一定要把本身删除
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>2.1.4</version>
         </dependency>-->
 
-        <!--
+
+        <!--  Redis需要额外的云盘  利于分布式存储和token等管理          -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
-        </dependency>-->
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+
+            <exclusions>
+                <exclusion>
+                    <groupId>io.lettuce</groupId>
+                    <artifactId>lettuce-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>    <!-- 对于redis的Util类  这个依赖一定要添加 -->
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+        </dependency>
+
+        <!-- redis依赖commons-pool 这个依赖一定要添加 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
+
+
+
+        <!--security 依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <!--引入JWT  用于token 鉴权 -->
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>3.11.0</version>
+        </dependency>
+
+
+        <!--常用工具类 比如数字处理NumberUtils、字符串处理类StringUtils、日期类DateUtils-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.7</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -70,13 +114,13 @@
             <version>3.0.5</version>
         </dependency>
 
-        <!-- lombok -->
+        <!-- lombok   简化get set等   -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
 
-        <!-- 代码自动生成器依赖-->
+        <!-- MP代码自动生成器依赖-->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-generator</artifactId>
@@ -89,19 +133,20 @@
             <version>2.2</version>
         </dependency>
 
-        <!-- jieba 分词库 https://mvnrepository.com/artifact/com.huaban/jieba-analysis -->
+        <!-- jieba 分词库 https://mvnrepository.com/artifact/com.huaban/jieba-analysis
         <dependency>
             <groupId>com.huaban</groupId>
             <artifactId>jieba-analysis</artifactId>
             <version>1.0.2</version>
-        </dependency>
-        <!--处理json的阿里巴巴包
+        </dependency>-->
+
+        <!--处理json的阿里巴巴包 -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.2.62</version>
         </dependency>
-        -->
+
         <!--语音转文字功能的包 -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
