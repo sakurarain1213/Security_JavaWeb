@@ -70,6 +70,7 @@ public class SecurityUserServiceImpl implements SecurityUserService {
 
     @Override
     public Result logOut() {
+
         // 1 获取 SecurityContextHolder 中的用户id
         UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         LogUser loginUser = (LogUser)authentication.getPrincipal();
@@ -77,6 +78,7 @@ public class SecurityUserServiceImpl implements SecurityUserService {
         String key = "login:"+loginUser.getUser().getUserId().toString();
         redisUtil.del(key);
         return ResultUtil.success("退出成功!");
+
 
     }
 

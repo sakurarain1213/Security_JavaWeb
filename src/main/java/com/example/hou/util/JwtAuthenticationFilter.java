@@ -34,10 +34,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws BusinessException, ServletException, IOException {
 
-        // 获取Headers上的token，我命名为token
+        // 关键实现    获取Headers上的token，我命名为token
         String token = request.getHeader("token");
 
-        System.out.println("doFilterInternal:"+token);
+        System.out.println("doFilterInternal:已经生成token:::"+token);
 
 
         if (StringUtils.isEmpty(token)) {
@@ -67,14 +67,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             userId = tokenInfo.getClaim("userId").asString();
 
         } catch (Exception e) {
-
             if(e instanceof TokenExpiredException){
                 throw new RuntimeException("登录已过期！");
             }else {
                 throw new RuntimeException("token非法");
             }
-
-
         }
 
         // 获取userid 从redis中获取用户信息

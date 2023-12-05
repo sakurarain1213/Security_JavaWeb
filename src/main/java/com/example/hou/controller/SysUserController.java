@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
     "password":"123456"
 }
 
-直接退出会失败 需要先在header里传登录时候的 token
+直接退出会失败 需要先在header里加入token 和具体值  不需要body参数
 47.103.113.75:8080/sysUser/logout
 
 
