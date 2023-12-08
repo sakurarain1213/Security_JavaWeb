@@ -81,6 +81,29 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     }
 
+          /*
+        try {
+            // 获取该用户所拥有的权限
+            //重大debug  permission 这边一开始就没有拿到permissionCode
+            //注意  现在的 List<String> 只有permissionCode这个列有值
+            String tempPermissionWithFenHao;
+            tempPermissionWithFenHao=sysPermissionMapper.selectPermission(user.getUserId());
+
+            System.out.println(tempPermissionWithFenHao+"--------------");
+
+            permissionsList = Arrays.asList(tempPermissionWithFenHao.split(";"));
+        } catch (Exception e) {
+            // 日志记录异常，处理或抛出
+            throw new RuntimeException("获取用户权限时发生异常", e);
+        }
+
+        System.out.println(permissionsList+"--------------------------");
+        //重大debug  permissionsList现在是一个只存权限名称的String list
+        //返回用户信息
+        return new LogUser(user,permissionsList);
+
+    }
+*/
 
 
 

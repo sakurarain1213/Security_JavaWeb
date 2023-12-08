@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 登录接口   返回token
 47.103.113.75:8080/sysUser/login
+localhost:8080/sysUser/login
 {
     "userName":"888",
     "password":"123456"
