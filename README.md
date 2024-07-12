@@ -7,7 +7,7 @@
 
 管理：宝塔面板  
 
-配置：Nginx 1.22.0  
+配置：Nginx 1.18.0  
 MySQL 5.7.43  
 PHP-7.4.33  
 Redis 7.2.3  
@@ -29,18 +29,4 @@ Xftp
 公网ip  47.103.113.75
 
 jdk目录
-/usr/java/jdk1.8.0_371/bin/java  
-
-
-
-常见问题：
-mysql异常没有root或者密码错误   不要重装数据库
-ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY '123';
-
-页面方面  
-nginx问题导致界面无法访问  直接下载高版本 1.22
-
-
-数据库攻击问题：
-安全组把3306端口的ip指定为本地公网  或者只在需要时开启全部ip访问
-警惕“”
+/usr/java/jdk1.8.0_371/bin/java

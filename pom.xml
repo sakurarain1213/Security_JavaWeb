@@ -170,6 +170,15 @@
             <version>2.6</version>
         </dependency>
 
+
+        <!--kafka MQ依赖-->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+
+
+
     </dependencies>
 
 

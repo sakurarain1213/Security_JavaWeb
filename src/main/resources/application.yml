@@ -6,9 +6,9 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://47.103.113.75:3306/sc?useUnicode=true & characterEncoding=utf-8 & allowPublicKeyRetrieval=true&useSSL=false & serverTimezone=Asia/Shanghai
-    username: root
-    password: 123abc
+    url: jdbc:mysql://150.158.110.63:3306/sc?useUnicode=true & characterEncoding=utf-8 & allowPublicKeyRetrieval=true&useSSL=false & serverTimezone=Asia/Shanghai
+    username: newuser123
+    password: password123
     #云服务器要去mysql更新权限
     #服务器与数据库大坑 如果你用编译器连接数据库，定义UTC，MySQL以本地时区进行转换会导致，执行时间比编译器执行时间早8个小时
     #建议用 serverTimezone=Asia/Shanghai   不用UTC
@@ -20,8 +20,27 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB #配置文件上传属性
 
+  kafka:
+    bootstrap-servers: kafkahost:9092 # 注意 这个IP名：kafkahost需要同时在linux服务器和win本地（win运行springboot时）的host文件 更改实际ip和名称映射 if wanna change_gotoSystem32_drivers_etc_hosts
+    topic: topic   # ?
+    properties:
+      max-request-bytes: 20000000
+    producer:
+      retries: 0
+      batch-size: 16384
+      buffer-memory: 33554432
+    consumer:
+      group-id: test_group
+      client-id: test_client
+      auto-offset-reset: earliest
+    main:
+      allow-circular-references: true  # ?
 
-#我们可以直接在配置文件中统一配置时间格式
+
+
+
+
+  #我们可以直接在配置文件中统一配置时间格式
   freemarker:
     cache: false
 
@@ -33,7 +52,7 @@ spring:
 # redis配置  如果不写 自动默认配置   如果服务器或者本地没有redis数据库 需要改动很多源文件
   redis:
   #url: redis://user:password@127.0.0.1:6379 #该地址配置以后会重置host,port,password的规则。
-    host: 47.103.113.75
+    host: 150.158.110.63
     # 在同机器上连接同机器的redis  建议写成localhost
     port: 6379
     password: redis    # 自定义密码

@@ -66,7 +66,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //开启权限拦截
                 .authorizeRequests()
                 // 允许登录接口匿名访问
-                .antMatchers("/sysUser/login", "/sysUser/test","/test/**").anonymous()
+                .antMatchers("/sysUser/login", "/sysUser/test",
+                        "/send/**",
+                        "/test/**").anonymous()
                 .antMatchers("/**.html","/js/**","/css/**","/img/**").permitAll()//放行静态资源
 
 

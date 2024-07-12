@@ -10,8 +10,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
+import java.util.List;
+
 
 
 @Data
@@ -50,7 +51,7 @@ public class LogUser implements UserDetails {
     @JSONField(serialize = false)
     private List<SimpleGrantedAuthority> authorities;
 
-    public LogUser(SysUser user, List<String> permissions){
+    public LogUser(SysUser user,List<String> permissions){
 
         this.user = user;
         this.permissions = permissions;
